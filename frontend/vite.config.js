@@ -3,10 +3,10 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/Poll_Vote_Platform/",
+  base: "./",
   plugins: [react()],
   server: {
     port: 5173,
-    open: true
+    open: false
   }
 });
