@@ -1,0 +1,20 @@
+{
+  "name": "poll-vote-platform",
+  "version": "1.0.0",
+  "description": "Full-Stack Real-Time Poll & Voting Platform",
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "setup:db": "cd backend && npx prisma db push && node prisma/seed.js",
+    "seed": "cd backend && node prisma/seed.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "author": "Kusuma",
+  "license": "MIT"
+}

@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("USER")
+  avatar    String?
+  createdAt DateTime @default(now())
+  polls     Poll[]
+  votes     Vote[]
+}
+
+model Poll {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  category    String       @default("General")
+  isPrivate   Boolean      @default(false)
+  isMultiple  Boolean      @default(false)
+  accessCode  String?
+  expiresAt   DateTime?
+  isClosed    Boolean      @default(false)
+  creatorId   String
+  creator     User         @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  options     PollOption[]
+  votes       Vote[]
+}
+
+model PollOption {
+  id        String   @id @default(uuid())
+  text      String
+  pollId    String
+  poll      Poll     @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  votes     Vote[]
+}
+
+model Vote {
+  id        String     @id @default(uuid())
+  pollId    String
+  poll      Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  optionId  String
+  option    PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+
+  @@unique([pollId, userId, optionId])
+}

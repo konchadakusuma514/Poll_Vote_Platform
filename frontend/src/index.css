@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-main: #F8FAFC;
+    --text-main: #0F172A;
+  }
+  .dark {
+    --bg-main: #0B0F19;
+    --text-main: #F8FAFC;
+  }
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+/* Glass & Card panels for Light & Dark */
+.app-card {
+  @apply bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/80 shadow-sm hover:shadow-md transition-all duration-200;
+}
+
+.glass-panel {
+  @apply bg-white/85 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80;
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-[#0B0F19];
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}
