@@ -33,7 +33,7 @@ You will see:
 
 ## ✨ Features
 
-- 🎨 **Luxury SaaS Color Theme**: Vibrant Sapphire Blue, Electric Violet, and Emerald accents with ambient mesh glows.
+- 🎨 **Modern SaaS 2-Column Hero**: Interactive live demo poll right on the landing page, metric stat cards, and clean unified Light & Dark modes.
 - 🔐 **Advanced Auth Portal**: Tabbed Login/Register, 8 Avatar Character selector, Live Password Strength Meter, and Show/Hide Password.
 - 👤 **Profile Customizer**: Edit display names and choose new avatars anytime from the Dashboard.
 - 💖 **Bookmark System**: Save favorite polls and view them in a dedicated Bookmarks tab.
