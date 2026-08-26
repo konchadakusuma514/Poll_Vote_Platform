@@ -588,6 +588,60 @@ def react_poll(poll_id):
     conn.close()
     return jsonify({"message": "Reaction recorded!"})
 
+# Bookmarks Toggle & Retrieval
+@app.route("/api/bookmarks/<poll_id>", methods=["POST"])
+def toggle_bookmark(poll_id):
+    current_user = get_current_user()
+    if not current_user:
+        return jsonify({"message": "Please log in to save bookmarks."}), 401
+
+    conn = get_db()
+    exists = conn.execute("SELECT id FROM bookmarks WHERE poll_id = ? AND user_id = ?", (poll_id, current_user["id"])).fetchone()
+    if exists:
+        conn.execute("DELETE FROM bookmarks WHERE id = ?", (exists["id"],))
+        conn.commit()
+        conn.close()
+        return jsonify({"message": "Bookmark removed.", "isBookmarked": False})
+    else:
+        conn.execute("INSERT INTO bookmarks (id, poll_id, user_id) VALUES (?, ?, ?)", (str(uuid.uuid4()), poll_id, current_user["id"]))
+        conn.commit()
+        conn.close()
+        return jsonify({"message": "Poll bookmarked!", "isBookmarked": True})
+
+@app.route("/api/bookmarks/user", methods=["GET"])
+def get_user_bookmarks():
+    current_user = get_current_user()
+    if not current_user: return jsonify({"message": "Unauthorized"}), 401
+
+    conn = get_db()
+    rows = conn.execute("""
+        SELECT p.* FROM polls p JOIN bookmarks b ON p.id = b.poll_id
+        WHERE b.user_id = ? ORDER BY b.created_at DESC
+    """, (current_user["id"],)).fetchall()
+    polls = [format_poll_row(conn, r, current_user["id"]) for r in rows]
+    conn.close()
+    return jsonify({"polls": polls})
+
+# Profile Edit
+@app.route("/api/auth/profile", methods=["PUT"])
+def update_profile():
+    current_user = get_current_user()
+    if not current_user: return jsonify({"message": "Unauthorized"}), 401
+
+    data = request.json or {}
+    name = (data.get("name") or "").strip()
+    avatar = data.get("avatar") or current_user["avatar"]
+
+    if not name:
+        return jsonify({"message": "Name cannot be empty."}), 400
+
+    conn = get_db()
+    conn.execute("UPDATE users SET name = ?, avatar = ? WHERE id = ?", (name, avatar, current_user["id"]))
+    conn.commit()
+    user = conn.execute("SELECT id, name, email, role, avatar, created_at FROM users WHERE id = ?", (current_user["id"],)).fetchone()
+    conn.close()
+    return jsonify({"message": "Profile updated!", "user": dict(user)})
+
 # User created & voted polls
 @app.route("/api/polls/user/created", methods=["GET"])
 def get_user_created_polls():
@@ -599,6 +653,7 @@ def get_user_created_polls():
     polls = [format_poll_row(conn, r, current_user["id"]) for r in rows]
     conn.close()
     return jsonify({"polls": polls})
+
 
 @app.route("/api/polls/user/voted", methods=["GET"])
 def get_user_voted_polls():

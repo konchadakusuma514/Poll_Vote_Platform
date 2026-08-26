@@ -153,5 +153,36 @@ export const api = {
     const result = await res.json();
     if (!res.ok) throw new Error(result.message || "Failed to react");
     return result;
+  },
+
+  // Bookmarks
+  async toggleBookmark(pollId) {
+    const res = await fetch(`${API_URL}/bookmarks/${pollId}`, {
+      method: "POST",
+      headers: getHeaders(true)
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Failed to toggle bookmark");
+    return result;
+  },
+
+  async getUserBookmarks() {
+    const res = await fetch(`${API_URL}/bookmarks/user`, { headers: getHeaders(true) });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Failed to fetch bookmarks");
+    return result;
+  },
+
+  // Profile
+  async updateProfile(name, avatar) {
+    const res = await fetch(`${API_URL}/auth/profile`, {
+      method: "PUT",
+      headers: getHeaders(true),
+      body: JSON.stringify({ name, avatar })
+    });
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.message || "Failed to update profile");
+    return result;
   }
 };
+
