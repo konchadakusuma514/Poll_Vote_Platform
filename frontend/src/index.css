@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,38 +8,57 @@
   :root {
     --bg-main: #F8FAFC;
     --text-main: #0F172A;
+    --card-bg: #FFFFFF;
+    --card-border: #E2E8F0;
   }
   .dark {
-    --bg-main: #0B0F19;
+    --bg-main: #080C14;
     --text-main: #F8FAFC;
+    --card-bg: #0F172A;
+    --card-border: #1E293B;
   }
   body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-main);
     color: var(--text-main);
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.08), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 90% 10%, rgba(139, 92, 246, 0.05), transparent 60%);
+    background-attachment: fixed;
     transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .dark body {
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 90% 10%, rgba(139, 92, 246, 0.1), transparent 60%);
   }
 }
 
-/* Glass & Card panels for Light & Dark */
+/* Modern App Cards */
 .app-card {
-  @apply bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/80 shadow-sm hover:shadow-md transition-all duration-200;
+  @apply bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(99,102,241,0.08)] transition-all duration-300;
 }
 
 .glass-panel {
-  @apply bg-white/85 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80;
+  @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm;
+}
+
+/* Gradient Text */
+.gradient-heading {
+  @apply bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent;
 }
 
 /* Custom modern scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100 dark:bg-[#0B0F19];
+  @apply bg-slate-100 dark:bg-[#080C14];
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-700 rounded;
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
 }
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400 dark:bg-slate-600;
+  @apply bg-indigo-500 dark:bg-indigo-400;
 }

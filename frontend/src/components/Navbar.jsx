@@ -1,28 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
 import {
   Vote,
-  PlusCircle,
   Compass,
+  PlusCircle,
   LayoutDashboard,
   LogIn,
-  UserPlus,
   LogOut,
   Sun,
   Moon,
   Globe,
-  Menu,
-  X
+  Sparkles
 } from "lucide-react";
 
 export const Navbar = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
-  const { lang, changeLanguage, t } = useLanguage();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -30,207 +27,124 @@ export const Navbar = () => {
     navigate("/");
   };
 
+  const languages = [
+    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: "hi", name: "हिंदी (Hindi)", flag: "🇮🇳" },
+    { code: "te", name: "తెలుగు (Telugu)", flag: "🇮🇳" },
+    { code: "ta", name: "தமிழ் (Tamil)", flag: "🇮🇳" },
+    { code: "es", name: "Español", flag: "🇪🇸" }
+  ];
+
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-              <Vote className="w-5 h-5 text-white" />
+    <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/85 dark:bg-[#080C14]/85 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center space-x-2.5 group">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-pink-500 p-0.5 shadow-md shadow-indigo-500/25 group-hover:scale-105 transition-transform">
+            <div className="w-full h-full bg-white dark:bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <Vote className="w-5 h-5 text-indigo-600 dark:text-indigo-400 group-hover:rotate-12 transition-transform" />
             </div>
-            <div>
-              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-white dark:to-indigo-300 bg-clip-text text-transparent">
-                {t("brandName")}
-              </span>
-              <span className="block text-[10px] uppercase tracking-wider font-bold text-indigo-600 dark:text-indigo-400 -mt-1">
-                {t("tagline")}
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            <Link
-              to="/explore"
-              className="flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
-            >
-              <Compass className="w-4 h-4 text-indigo-500" />
-              <span>{t("navExplore")}</span>
-            </Link>
-
-            {isAuthenticated && (
-              <>
-                <Link
-                  to="/create"
-                  className="flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  <PlusCircle className="w-4 h-4 text-emerald-500" />
-                  <span>{t("navCreate")}</span>
-                </Link>
-                <Link
-                  to="/dashboard"
-                  className="flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-sky-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors"
-                >
-                  <LayoutDashboard className="w-4 h-4 text-sky-500" />
-                  <span>{t("navDashboard")}</span>
-                </Link>
-              </>
-            )}
-          </nav>
-
-          {/* Controls: Language Selector + Theme Toggle + Auth */}
-          <div className="hidden md:flex items-center space-x-3">
-            {/* Language Dropdown */}
-            <div className="relative flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold">
-              <Globe className="w-3.5 h-3.5 text-indigo-500" />
-              <select
-                value={lang}
-                onChange={(e) => changeLanguage(e.target.value)}
-                className="bg-transparent text-slate-800 dark:text-slate-200 outline-none cursor-pointer"
-              >
-                <option value="en" className="dark:bg-slate-900">English</option>
-                <option value="hi" className="dark:bg-slate-900">हिंदी (Hindi)</option>
-                <option value="te" className="dark:bg-slate-900">తెలుగు (Telugu)</option>
-                <option value="ta" className="dark:bg-slate-900">தமிழ் (Tamil)</option>
-                <option value="es" className="dark:bg-slate-900">Español</option>
-              </select>
-            </div>
-
-            {/* Theme Toggle (Light / Dark Mode) */}
-            <button
-              onClick={toggleTheme}
-              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-              className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-amber-400 hover:scale-105 border border-slate-200 dark:border-slate-700 transition-all"
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4 text-indigo-600" />}
-            </button>
-
-            {isAuthenticated ? (
-              <div className="flex items-center space-x-2.5">
-                <div className="flex items-center space-x-2 bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 py-1.5 px-3 rounded-full">
-                  <img
-                    src={user?.avatar || "https://api.dicebear.com/7.x/bottts/svg?seed=User"}
-                    alt={user?.name}
-                    className="w-6 h-6 rounded-full"
-                  />
-                  <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">{user?.name}</span>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  title="Log out"
-                  className="p-2 text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Link
-                  to="/login"
-                  className="px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-indigo-600 rounded-lg transition-colors"
-                >
-                  {t("navLogin")}
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-all"
-                >
-                  {t("navRegister")}
-                </Link>
-              </div>
-            )}
           </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <button
-              onClick={toggleTheme}
-              className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-amber-400"
-            >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-300"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+          <div className="flex flex-col">
+            <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+              PollPulse
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+            </span>
+            <span className="text-[10px] font-semibold text-slate-400 -mt-1 tracking-wider uppercase">Live Voting</span>
           </div>
-        </div>
-      </div>
+        </Link>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-3 pb-5 space-y-3 shadow-xl">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-            <span className="text-xs font-bold text-slate-500">Language:</span>
-            <select
-              value={lang}
-              onChange={(e) => changeLanguage(e.target.value)}
-              className="bg-slate-100 dark:bg-slate-800 text-xs font-semibold rounded p-1"
-            >
-              <option value="en">English</option>
-              <option value="hi">हिंदी (Hindi)</option>
-              <option value="te">తెలుగు (Telugu)</option>
-              <option value="ta">தமிழ் (Tamil)</option>
-              <option value="es">Español</option>
-            </select>
-          </div>
-
+        {/* Center Nav Links */}
+        <nav className="hidden md:flex items-center space-x-1">
           <Link
             to="/explore"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-semibold"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all"
           >
-            <Compass className="w-5 h-5 text-indigo-500" />
+            <Compass className="w-4 h-4 text-indigo-500" />
             <span>{t("navExplore")}</span>
           </Link>
-          {isAuthenticated ? (
-            <>
-              <Link
-                to="/create"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-semibold"
+          <Link
+            to="/create"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all"
+          >
+            <PlusCircle className="w-4 h-4 text-emerald-500" />
+            <span>{t("navCreate")}</span>
+          </Link>
+        </nav>
+
+        {/* Right Tools & Profile */}
+        <div className="flex items-center space-x-2.5">
+          {/* Language Selector */}
+          <div className="relative group">
+            <div className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer hover:border-indigo-500 transition-colors">
+              <Globe className="w-3.5 h-3.5 text-indigo-500" />
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-transparent text-xs font-bold outline-none cursor-pointer pr-1"
               >
-                <PlusCircle className="w-5 h-5 text-emerald-500" />
-                <span>{t("navCreate")}</span>
-              </Link>
+                {languages.map((l) => (
+                  <option key={l.code} value={l.code} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
+                    {l.flag} {l.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Theme Toggle (Light / Dark) */}
+          <button
+            onClick={toggleTheme}
+            title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-amber-400 hover:border-indigo-500 transition-all"
+          >
+            {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+          </button>
+
+          {/* Auth State */}
+          {isAuthenticated ? (
+            <div className="flex items-center space-x-2 pl-2 border-l border-slate-200 dark:border-slate-800">
               <Link
                 to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-semibold"
+                className="flex items-center space-x-2 p-1.5 pr-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
               >
-                <LayoutDashboard className="w-5 h-5 text-sky-500" />
-                <span>{t("navDashboard")}</span>
+                <img
+                  src={user?.avatar || "https://api.dicebear.com/7.x/bottts/svg?seed=User"}
+                  alt={user?.name}
+                  className="w-7 h-7 rounded-lg ring-1 ring-indigo-500/40 bg-slate-100 dark:bg-slate-800"
+                />
+                <span className="hidden sm:inline text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[100px]">
+                  {user?.name?.split(" ")[0]}
+                </span>
               </Link>
+
               <button
-                onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                className="w-full text-left px-3 py-2 text-sm font-semibold text-rose-500"
+                onClick={handleLogout}
+                title={t("navLogout")}
+                className="p-2 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all"
               >
-                {t("navLogout")}
+                <LogOut className="w-4 h-4" />
               </button>
-            </>
+            </div>
           ) : (
-            <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="flex items-center space-x-2">
               <Link
                 to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-center py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               >
                 {t("navLogin")}
               </Link>
               <Link
                 to="/register"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-center py-2 rounded-lg bg-indigo-600 text-white text-xs font-bold"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-xs shadow-md shadow-indigo-600/25 transition-all hover:scale-105"
               >
                 {t("navRegister")}
               </Link>
             </div>
           )}
         </div>
-      )}
+      </div>
     </header>
   );
 };

@@ -669,25 +669,21 @@ def serve_frontend(path):
         return send_file(index_file)
     return "<h1>PollPulse API is active! (Frontend build not found. Please run 'npm run build' inside frontend)</h1>", 200
 
-# ==================== AUTO BROWSER LAUNCH ====================
-
-def open_browser():
-    time.sleep(1.2)
-    url = "http://127.0.0.1:5000"
-    print(f"\n🌐 Opening PollPulse in your browser at: {url}\n")
-    webbrowser.open(url)
+# ==================== MAIN SERVER ENTRYPOINT ====================
 
 if __name__ == "__main__":
     init_db()
     port = int(os.environ.get("PORT", 5000))
-    print("=" * 65)
+    print("=" * 68)
     print("  🗳️  POLLPULSE — REAL-TIME POLLING & VOTING PLATFORM")
-    print(f"  🚀  Server Running at http://127.0.0.1:{port}")
-    print("  ✨  Multi-Language: English | Hindi | Telugu | Tamil | Spanish")
+    print("  ✨  Status: Server is ACTIVE & Ready!")
+    print("  🌐  Multi-Language: English | Hindi | Telugu | Tamil | Spanish")
     print("  🌗  Theme: Light Mode (Default) & Dark Mode")
     print("  🛡️  Zero Duplicate Voting Guarantee")
-    print("=" * 65)
+    print("=" * 68)
+    print("  👉  COPY & PASTE THIS URL INTO YOUR CHROME / BROWSER:")
+    print(f"      http://127.0.0.1:{port}")
+    print("=" * 68)
 
-    # Launch browser automatically
-    threading.Thread(target=open_browser, daemon=True).start()
     app.run(host="0.0.0.0", port=port, debug=False)
+
